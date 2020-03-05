@@ -9,14 +9,14 @@ namespace Logicalmind.Configuration.Json
 {
     public class EncryptedJsonConfigurationProvider : JsonConfigurationProvider
     {
-        private readonly ICryption cryption;
+        private readonly ICryptor cryptor;
         private readonly Dictionary<string, string> decrypted = new Dictionary<string, string>();
 
         public EncryptedJsonConfigurationProvider(string key,
                                                   EncryptedJsonConfigurationSource encryptedConfigurationSource)
                                                     : base(encryptedConfigurationSource)
         {
-            cryption = new Cryption.Cryption(key);
+            cryptor = new Cryptor(key);
         }
 
         public override bool TryGet(string key, out string value)
@@ -37,7 +37,7 @@ namespace Logicalmind.Configuration.Json
 
             foreach (var item in encryptedItems)
             {
-                decrypted.Add(item.Key.Replace(".Encrypted", ""), cryption.Decrypt(item.Value));
+                decrypted.Add(item.Key.Replace(".Encrypted", ""), cryptor.Decrypt(item.Value));
             }
         }
     }
